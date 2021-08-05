@@ -6,9 +6,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class WordSearchApp {
 	public static void main(String args[]) {
-		List<String> words = Arrays.asList("ONE", "TWO", "THREE");
+		List<String> words = Arrays.asList("ONE", "TWO", "THREE", "FOUR");
 		
-		GridEasy grid = new GridEasy(10);
+		GridHard grid = new GridHard(10);
 		
 		grid.fillGrid(words);
 		grid.displayGrid();

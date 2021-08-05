@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class GridHard {
 	
@@ -40,8 +39,6 @@ public class GridHard {
 		}
 	}
 	
-	
-	
 	public void displayGrid() {
 		for (int i = 0; i < GRID_SIZE; i++) {
 			for (int j = 0; j < GRID_SIZE; j++) {
@@ -52,16 +49,33 @@ public class GridHard {
 	}
 	
 	public void fillGrid(List<String> words) {
-		for (String word: words) {
-			Collections.shuffle(coordinates);
-			
+		Collections.shuffle(coordinates);
+		for(String word: words) {
 			for(Coordinate coordinate: coordinates) {
 				int x = coordinate.x;
 				int y = coordinate.y;
-			
-				if(wordFit(word, coordinate)) {
-					for (char c: word.toCharArray()) {
-						contents[x][y++]= c;
+				Direction direction = fitDirection(word, coordinate);
+				
+				if(direction != null) {
+					switch (direction) {
+					
+						case HORIZONTAL:
+							for (char c: word.toCharArray()) {
+								contents[x][y++]= c;
+							}
+							break;
+							
+						case VERTICAL:
+							for (char c: word.toCharArray()) {
+								contents[x++][y]= c;
+							}
+							break;
+						
+						case DIAGONAL:
+							for (char c: word.toCharArray()) {
+								contents[x++][y++]= c;
+							}
+							break;
 					}
 					break;
 				}
@@ -69,7 +83,7 @@ public class GridHard {
 		}
 	}
 	
-	private Direction wordFit(String word, Coordinate coordinate) {
+	private Direction fitDirection(String word, Coordinate coordinate) {
 		List<Direction> directions = Arrays.asList(Direction.values());
 		Collections.shuffle(directions);
 		for (Direction direction : directions) {
@@ -80,9 +94,6 @@ public class GridHard {
 		return null;	
 	}
 			
-			
-			
-			
 	private boolean ifFits(String word, Coordinate coordinate, Direction direction) {		
 		int wordLength = word.length();
 		switch (direction) {
@@ -90,28 +101,25 @@ public class GridHard {
 			case HORIZONTAL:
 				if(coordinate.y + wordLength > GRID_SIZE) return false;
 				for(int i = 0; i < wordLength; i++) {
-					
+					if(contents[coordinate.x][coordinate.y +i] != '_') return false;
 				}
+				break;
 					
 			case VERTICAL:
 				if(coordinate.x + wordLength > GRID_SIZE) return false;
+				for(int i = 0; i < wordLength; i++) {
+					if(contents[coordinate.x + i][coordinate.y] != '_') return false;
+				}
+				break;
 				
 			case DIAGONAL:
 				if(coordinate.x + wordLength > GRID_SIZE || coordinate.y + wordLength > GRID_SIZE) return false;
-				
+				for(int i = 0; i < wordLength; i++) {
+					if(contents[coordinate.x + i][coordinate.y + i] != '_') return false;
+				}	
+				break;
 		}
 		
-		
-		
-		
-		
-		if(coordinate.y + wordLength < GRID_SIZE) {
-			for(int i = 0; i < wordLength; i++) {
-				if (contents[coordinate.x][coordinate.y + i] != '_') return false;
-			}
-			return true;
-		}
-		return false;
+		return true;
 	}
-	
 }
