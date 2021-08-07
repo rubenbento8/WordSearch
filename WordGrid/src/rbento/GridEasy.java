@@ -3,15 +3,12 @@ package rbento;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
 public class GridEasy {
 	
 	private int GRID_SIZE;
 	private char[][] contents;
 	private List<Coordinate> coordinates = new ArrayList<>();
 	
-	@SuppressWarnings("unused")
 	private class Coordinate {
 		int x;
 		int y;
